@@ -4,8 +4,10 @@ const add = document.getElementById("add");
 const minus = document.getElementById("minus");
 const number = document.querySelector("span");
 
+number.innerText = 0;
+
 const reducer = (state = 0, action) => {
-	console.log(state, action);
+	console.log(action);
 	/*
   state = 0 state의 default Value는 0이다.
 	countModifier 즉, reducer는 action을 통해 데이터를 수정가능하다.
@@ -15,11 +17,11 @@ const reducer = (state = 0, action) => {
   */
 	if (action.type === "ADD") {
 		return state + 1;
-	}
-	if (action.type === "MINUS") {
+	} else if (action.type === "MINUS") {
 		return state - 1;
+	} else {
+		return state;
 	}
-	return state;
 };
 //reducer은 내 데이터를 수정할 수 있는 함수이다
 //숫자가 increase증가 or decrease감소 할 수 있다.
@@ -28,11 +30,18 @@ const reducer = (state = 0, action) => {
 const store = createStore(reducer);
 //countStore
 //store은 데이터를 저장하는곳
+const onChange = () => {
+	number.innerText = store.getState();
+};
 
-store.dispatch({ type: "ADD" });
-store.dispatch({ type: "ADD" });
-store.dispatch({ type: "ADD" });
-store.dispatch({ type: "ADD" });
-store.dispatch({ type: "MINUS" });
+store.subscribe(onChange);
+const handleAdd = () => {
+	store.dispatch({ type: "ADD" });
+};
 
-console.log(store.getState());
+const handleMinus = () => {
+	store.dispatch({ type: "MINUS" });
+};
+
+add.addEventListener("click", handleAdd);
+minus.addEventListener("click", handleMinus);
